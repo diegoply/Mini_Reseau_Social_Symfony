@@ -1,0 +1,52 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Mes Postes{% endblock %}
+
+{% block stylesheets %}
+   {{ parent() }}
+   <link rel="stylesheet" href="style.css">
+{% endblock %}
+
+{% block body %}
+    {% if age > 18 %}
+        <p>Vous êtes <b>majeur</b></p>
+    {% else %}
+        <p>Vous êtes <b>mineur</b></p>
+    {% endif %}
+
+    <p>Vous avez {{age}} ans.</p>
+
+
+    {% set fruits = ["Banana", "apple", "cherry"] %}
+    {{dump(fruits)}}
+    <ul>
+    {% for fruit in fruits %}
+        <li>{{ fruit }}</li>
+    {% endfor %}
+    </ul>
+
+    {% set numbers  = [3, 2, 7, 1, 8, 9, 14, 4] %}
+    <i>{{max(numbers)}}</i>
+
+    <br></br>
+    {#{% set myTitle = '<script>alert("Coucou")</script>' %}
+    {{myTitle|raw}}
+#}
+    <br></br>
+
+    {{"now"|date("d/m/Y")}}
+    <br></br>
+
+    <u>{{numbers|last}}</u>
+    <br></br>
+    <u>{{numbers|length}}</u>
+
+    <br></br>
+    
+    {% set identite = {"prenom": "Diego", "nom": "Ply-Marrero", "age": 36} %}
+    {{"Je m'appelle " ~ identite.prenom ~ " " ~ identite.nom ~ " J'ai " ~ identite.age ~ " ans"}}
+
+    <br></br>
+
+    <button class="btn btn-primary">Button</button>
+    {% endblock %}
