@@ -28,12 +28,12 @@ class PostType extends AbstractType {
                 new NotBlank(["message" => "le contenue ne doit pas être vide !"])
             ],
             
-    ])        
+        ])        
             ->add("image", UrlType::class, ["label" => "URL de l'image",
                 "required" => false,
                 "constraints" => [new Url(["message" => "L'image doit être une URL valide"])
             ],
-    ]);
+        ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
