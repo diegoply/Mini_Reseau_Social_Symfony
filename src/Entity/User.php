@@ -2,8 +2,11 @@
 
 namespace App\Entity;
 
+
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -25,7 +28,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
-    private ?string $password = null;
+    private ?string $hashedPassword = null;
+
+    private ?UserPasswordHasherInterface $passwordHasher = null;
+
+    #[ORM\OneToMany(targetEntity: "App\Entity\Post", mappedBy: "user")]
+    private $posts;
+
+    public function __construct(UserPasswordHasherInterface $passwordHasher) {
+        $this->passwordHasher = $passwordHasher;
+        $this->posts = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -78,12 +91,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getPassword(): string
     {
-        return $this->password;
+        return $this->hashedPassword;
     }
 
-    public function setPassword(string $password): static
+    public function setPassword(string $password): self
     {
-        $this->password = $password;
+        $this->hashedPassword = $this->passwordHasher->hashPassword($this, $password);
 
         return $this;
     }
