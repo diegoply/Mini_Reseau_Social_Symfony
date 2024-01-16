@@ -3,12 +3,9 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -29,14 +26,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     private ?string $password = null;
-
-    #[ORM\OneToMany(targetEntity: "App\Entity\Post", mappedBy: "user")]
-    private $posts;
-
-    public function __construct(UserPasswordHasherInterface $passwordHasher){
-        $this->passwordHasher = $passwordHasher;
-        $this->posts = new ArrayCollection;
-    }
 
     public function getId(): ?int
     {
@@ -94,7 +83,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setPassword(string $password): static
     {
-        $this->password = $this->passwordHasher->hashPassword($this, $password);
+        $this->password = $password;
 
         return $this;
     }
@@ -106,25 +95,5 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
-    }
-
-    /**
-     * Get the value of posts
-     */ 
-    public function getPosts()
-    {
-        return $this->posts;
-    }
-
-    /**
-     * Set the value of posts
-     *
-     * @return  self
-     */ 
-    public function setPosts($posts)
-    {
-        $this->posts = $posts;
-
-        return $this;
     }
 }
